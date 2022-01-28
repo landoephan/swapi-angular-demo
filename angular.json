@@ -7,7 +7,8 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "sass"
+          "style": "sass",
+          "skipTests": true
         },
         "@schematics/angular:application": {
           "strict": true
@@ -69,13 +70,14 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "ngx-build-plus:dev-server",
           "configurations": {
             "production": {
               "browserTarget": "swapi-coding-challenge:build:production"
             },
             "development": {
-              "browserTarget": "swapi-coding-challenge:build:development"
+              "browserTarget": "swapi-coding-challenge:build:development",
+              "extraWebpackConfig": "./cypress/coverage.webpack.js"
             }
           },
           "defaultConfiguration": "development"
@@ -84,6 +86,30 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "swapi-coding-challenge:build"
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "swapi-coding-challenge:serve",
+            "watch": true,
+            "headless": false
+          },
+          "configurations": {
+            "development": {
+              "devServerTarget": "swapi-coding-challenge:serve:development"
+            }
+          }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "swapi-coding-challenge:serve"
+          },
+          "configurations": {
+            "development": {
+              "devServerTarget": "swapi-coding-challenge:serve:development"
+            }
           }
         }
       }
