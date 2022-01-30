@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { catchError, EMPTY, forkJoin, Observable, tap } from 'rxjs'
+import { catchError, EMPTY, finalize, forkJoin, Observable, tap } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Film } from './interfaces/swapi/film'
 import { Person } from './interfaces/swapi/person'
@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 	homeworld$: Observable<Planet | null> | undefined
 	films$: Observable<Array<Film | null>> | undefined
 	activeCard: number = -1
+	showPersonLoader: boolean = false
 
 	constructor(private swapiService: SwapiService, private snackBar: MatSnackBar) {}
 
@@ -42,6 +43,7 @@ export class AppComponent implements OnInit {
 
 	loadPersonDetails(url: string, index: number): void {
 		this.activeCard = index
+		this.showPersonLoader = true
 		// we could show details for a person without loading a person - since it was asked for in the task we will do it with extra loading
 		this.person$ = this.swapiService.getPerson(url).pipe(
 			tap((response) => {
@@ -52,7 +54,8 @@ export class AppComponent implements OnInit {
 				console.log(error)
 				this.openSnackBar('Error while loading person details. Please try again.')
 				return null
-			})
+			}),
+			finalize(() => (this.showPersonLoader = false))
 		)
 	}
 
