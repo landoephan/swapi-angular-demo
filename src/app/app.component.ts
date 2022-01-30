@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
 	person$: Observable<Person | null> | undefined
 	homeworld$: Observable<Planet | null> | undefined
 	films$: Observable<Array<Film | null>> | undefined
+	activeCard: number = -1
 
 	constructor(private swapiService: SwapiService, private snackBar: MatSnackBar) {}
 
@@ -39,7 +40,8 @@ export class AppComponent implements OnInit {
 		await this.loadPeople(Math.floor(Math.random() * 8) + 1)
 	}
 
-	loadPersonDetails(url: string): void {
+	loadPersonDetails(url: string, index: number): void {
+		this.activeCard = index
 		// we could show details for a person without loading a person - since it was asked for in the task we will do it with extra loading
 		this.person$ = this.swapiService.getPerson(url).pipe(
 			tap((response) => {

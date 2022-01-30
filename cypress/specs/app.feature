@@ -15,6 +15,7 @@ Feature: App Page
     Then 3 people are visible
     When I click on first person details
     Then the details for a person are visible
+    And the first card is highlighted
     And the films are visible
 
   Scenario: Error is shown on failed people request

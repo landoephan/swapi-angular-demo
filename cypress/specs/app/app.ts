@@ -100,6 +100,12 @@ Then('the films are visible', () => {
 	)
 })
 
+Then('the first card is highlighted', () => {
+	cy.getBySel('person-card-0').should('have.class', 'active-card')
+	cy.getBySel('person-card-1').should('not.have.class', 'active-card')
+	cy.getBySel('person-card-2').should('not.have.class', 'active-card')
+})
+
 Then('no people are visible', () => {
 	cy.getBySelLike('person-card').should('not.exist')
 })
