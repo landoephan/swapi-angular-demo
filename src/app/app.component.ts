@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
 	films$: Observable<Array<Film | null>> | undefined
 	activeCard: number = -1
 	showPersonLoader: boolean = false
+	random: boolean = false
 
 	constructor(private swapiService: SwapiService, private snackBar: MatSnackBar) {}
 
@@ -37,8 +38,7 @@ export class AppComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-		// TODO stop skipping the last page (there are only two people)
-		await this.loadPeople(Math.floor(Math.random() * 8) + 1)
+		await this.loadPeople()
 	}
 
 	loadPersonDetails(url: string, index: number): void {
@@ -59,8 +59,7 @@ export class AppComponent implements OnInit {
 		)
 	}
 
-	concatTitles(films: Array<Film | null>) {
-		console.log(films)
+	concatTitles(films: Array<Film | null>): string {
 		return films
 			.map((film) => {
 				return film?.title
@@ -68,11 +67,21 @@ export class AppComponent implements OnInit {
 			.join(', ')
 	}
 
-	private loadPeople(pageNumber: number): void {
+	changeRandom(): void {
+		this.loadPeople()
+	}
+
+	private loadPeople(): void {
+		// TODO stop skipping the last page (there are only two people)
+		this.activeCard = -1
+		this.person$ = undefined
+		const pageNumber = this.random ? Math.floor(Math.random() * 8) + 1 : 1
+		const peopleCount = 3
 		this.people$ = this.swapiService.getPeople(pageNumber).pipe(
 			map((result: SwapiListResponse) => {
-				console.log(AppComponent.getRandomSlice(result.results, 3))
-				return AppComponent.getRandomSlice(result.results, 3) as Array<Person>
+				return this.random
+					? AppComponent.getRandomSlice(result.results, peopleCount)
+					: result.results.slice(0, peopleCount)
 			}),
 			catchError((error: any) => {
 				console.log(error)

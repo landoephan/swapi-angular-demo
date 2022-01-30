@@ -54,3 +54,14 @@ Feature: App Page
     When I click on first person details
     Then an error is shown with message 'Error while loading films.'
     And no films are visible
+
+  Scenario: Change people on random switch
+    Given people request will succeed
+    And person request will succeed
+    When I visit /
+    And I click on first person details
+    Then the first card is highlighted
+    When I toggle random switch
+    Then no person details are visible
+    And no card is highlighted
+

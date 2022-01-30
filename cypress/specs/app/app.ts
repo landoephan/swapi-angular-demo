@@ -61,6 +61,10 @@ When('I click on first person details', () => {
 	cy.getBySel('person-detail-button-0').click()
 })
 
+When('I toggle random switch', () => {
+	cy.getBySel('random-slider').click()
+})
+
 Then('the path is {word}', (path: string) => {
 	cy.url().should('eq', `${Cypress.config().baseUrl}${path}`)
 })
@@ -70,7 +74,7 @@ Then('the toolbar is visible', () => {
 })
 
 Then('the headline is visible', () => {
-	cy.getBySel('app-headline').contains('3 random Star Wars people')
+	cy.getBySel('app-headline').contains('Star Wars people')
 })
 
 Then('3 people are visible', () => {
@@ -106,14 +110,22 @@ Then('the first card is highlighted', () => {
 	cy.getBySel('person-card-2').should('not.have.class', 'active-card')
 })
 
+Then('no card is highlighted', () => {
+	cy.getBySelLike('person-card').should('not.have.class', 'active-card')
+})
+
 Then('no people are visible', () => {
 	cy.getBySelLike('person-card').should('not.exist')
 })
 
-Then('an error is shown with message {string}', (message: string) => {
-	cy.contains(message).should('be.visible')
-})
-
 Then('no films are visible', () => {
 	cy.getBySel('person-films').should('not.exist')
+})
+
+Then('no person details are visible', () => {
+	cy.getBySel('person-details').should('not.exist')
+})
+
+Then('an error is shown with message {string}', (message: string) => {
+	cy.contains(message).should('be.visible')
 })
