@@ -1,118 +1,123 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1,
-  "newProjectRoot": "projects",
-  "projects": {
-    "swapi-coding-challenge": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "sass",
-          "skipTests": true
-        },
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
-      "root": "",
-      "sourceRoot": "src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/swapi-coding-challenge",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "sass",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.sass"
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "ngx-build-plus:dev-server",
-          "configurations": {
-            "production": {
-              "browserTarget": "swapi-coding-challenge:build:production"
-            },
-            "development": {
-              "browserTarget": "swapi-coding-challenge:build:development",
-              "extraWebpackConfig": "./cypress/coverage.webpack.js"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "swapi-coding-challenge:build"
-          }
-        },
-        "cypress-open": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "swapi-coding-challenge:serve",
-            "watch": true,
-            "headless": false
-          },
-          "configurations": {
-            "development": {
-              "devServerTarget": "swapi-coding-challenge:serve:development"
-            }
-          }
-        },
-        "cypress-run": {
-          "builder": "@cypress/schematic:cypress",
-          "options": {
-            "devServerTarget": "swapi-coding-challenge:serve"
-          },
-          "configurations": {
-            "development": {
-              "devServerTarget": "swapi-coding-challenge:serve:development"
-            }
-          }
-        }
-      }
-    }},
-  "defaultProject": "swapi-coding-challenge"
+	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+	"version": 1,
+	"newProjectRoot": "projects",
+	"projects": {
+		"swapi-coding-challenge": {
+			"projectType": "application",
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "sass",
+					"skipTests": true
+				},
+				"@schematics/angular:application": {
+					"strict": true
+				}
+			},
+			"root": "",
+			"sourceRoot": "src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:browser",
+					"options": {
+						"outputPath": "dist/swapi-coding-challenge",
+						"index": "src/index.html",
+						"main": "src/main.ts",
+						"polyfills": "src/polyfills.ts",
+						"tsConfig": "tsconfig.app.json",
+						"inlineStyleLanguage": "sass",
+						"assets": ["src/favicon.ico", "src/assets"],
+						"styles": ["src/styles.sass"],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kb",
+									"maximumError": "1mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "2kb",
+									"maximumError": "4kb"
+								}
+							],
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.prod.ts"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"buildOptimizer": false,
+							"optimization": false,
+							"vendorChunk": true,
+							"extractLicenses": false,
+							"sourceMap": true,
+							"namedChunks": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "ngx-build-plus:dev-server",
+					"configurations": {
+						"production": {
+							"browserTarget": "swapi-coding-challenge:build:production"
+						},
+						"development": {
+							"browserTarget": "swapi-coding-challenge:build:development",
+							"extraWebpackConfig": "./cypress/coverage.webpack.js"
+						}
+					},
+					"defaultConfiguration": "development"
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "swapi-coding-challenge:build"
+					}
+				},
+				"cypress-open": {
+					"builder": "@cypress/schematic:cypress",
+					"options": {
+						"devServerTarget": "swapi-coding-challenge:serve",
+						"watch": true,
+						"headless": false
+					},
+					"configurations": {
+						"development": {
+							"devServerTarget": "swapi-coding-challenge:serve:development"
+						}
+					}
+				},
+				"cypress-run": {
+					"builder": "@cypress/schematic:cypress",
+					"options": {
+						"devServerTarget": "swapi-coding-challenge:serve"
+					},
+					"configurations": {
+						"development": {
+							"devServerTarget": "swapi-coding-challenge:serve:development"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@angular-eslint/builder:lint",
+					"options": {
+						"lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+					}
+				}
+			}
+		}
+	},
+	"defaultProject": "swapi-coding-challenge",
+	"cli": {
+		"defaultCollection": "@angular-eslint/schematics"
+	}
 }

@@ -6,21 +6,21 @@
 // as explained in the cypress docs
 // https://docs.cypress.io/api/plugins/preprocessors-api.html#Examples
 
-const browserify = require('@cypress/browserify-preprocessor');
-const cucumber = require('cypress-cucumber-preprocessor').default;
-const path = require('path');
+const browserify = require('@cypress/browserify-preprocessor')
+const cucumber = require('cypress-cucumber-preprocessor').default
+const path = require('path')
 
 export default (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions): Cypress.PluginConfigOptions => {
-  // code coverage plugin
-  require('@cypress/code-coverage/task')(on, config);
+	// code coverage plugin
+	require('@cypress/code-coverage/task')(on, config)
 
-  // cucumber plugin
-  const options = {
-    ...browserify.defaultOptions,
-    typescript: path.resolve('node_modules/typescript'),
-  };
+	// cucumber plugin
+	const options = {
+		...browserify.defaultOptions,
+		typescript: path.resolve('node_modules/typescript'),
+	}
 
-  on('file:preprocessor', cucumber(options));
+	on('file:preprocessor', cucumber(options))
 
-  return config;
-};
+	return config
+}

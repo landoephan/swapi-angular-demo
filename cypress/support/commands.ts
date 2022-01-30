@@ -24,22 +24,20 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import Chainable = Cypress.Chainable;
+import Chainable = Cypress.Chainable
 
-Cypress.Commands.add('getBySel', (selector, ...args): Chainable => cy.get(`[data-cy=${selector}]`, ...args));
+Cypress.Commands.add('getBySel', (selector, ...args): Chainable => cy.get(`[data-cy=${selector}]`, ...args))
 
-Cypress.Commands.add('getBySelLike', (selector, ...args): Chainable => cy.get(`[data-cy*=${selector}]`, ...args));
+Cypress.Commands.add('getBySelLike', (selector, ...args): Chainable => cy.get(`[data-cy*=${selector}]`, ...args))
 
 // run once before all tests
 // set some global catch all interceptors
 before(() => {
-  // intercept all not explicit configured api calls
-  cy.intercept(/api.*/, {
-    statusCode: 501,
-  }).as('apiCatchAll');
-
-});
+	// intercept all not explicit configured api calls
+	cy.intercept(/api.*/, {
+		statusCode: 501,
+	}).as('apiCatchAll')
+})
 
 // run before every test
-beforeEach(() => {
-});
+beforeEach(() => {})
