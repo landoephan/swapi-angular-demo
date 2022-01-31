@@ -21,6 +21,10 @@ export class SwapiService {
 		return this.http.get<Person>(url)
 	}
 
+	public getPeopleByName(name: string): Observable<SwapiListResponse> {
+		return this.http.get<SwapiListResponse>(`${environment.swapiUrl}/people/?search=${name}`)
+	}
+
 	public getHomeworld(url: string): Observable<Planet> {
 		return this.http.get<Planet>(url)
 	}

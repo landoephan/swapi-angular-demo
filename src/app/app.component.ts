@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
 	activeCard: number = -1
 	showPersonLoader: boolean = false
 	random: boolean = false
+	search: string = ''
 
 	constructor(private swapiService: SwapiService, private snackBar: MatSnackBar) {}
 
@@ -68,7 +69,15 @@ export class AppComponent implements OnInit {
 	}
 
 	changeRandom(): void {
+		this.search = ''
 		this.loadPeople()
+	}
+
+	handleSearchInput(): void {
+		this.activeCard = -1
+		this.person$ = undefined
+		// load initial set of people when search field is empty
+		this.search ? this.searchPeople() : this.loadPeople()
 	}
 
 	private loadPeople(): void {
@@ -86,6 +95,20 @@ export class AppComponent implements OnInit {
 			catchError((error: any) => {
 				console.log(error)
 				this.openSnackBar('Error while loading the people. Please try again.')
+				return EMPTY
+			})
+		)
+	}
+
+	private searchPeople(): void {
+		// TODO add pagination
+		this.people$ = this.swapiService.getPeopleByName(this.search).pipe(
+			map((result: SwapiListResponse) => {
+				return result.results
+			}),
+			catchError((error: any) => {
+				console.log(error)
+				this.openSnackBar('Error while searching people. Please try again.')
 				return EMPTY
 			})
 		)

@@ -15,42 +15,62 @@ Given('people request will fail', () => {
 })
 
 Given('person request will succeed', () => {
-	cy.intercept('GET', '/api/people/*', {
+	cy.intercept('GET', '/api/people/*/', {
 		statusCode: 200,
 		fixture: 'person.get.json',
 	}).as('person_success')
 })
 
 Given('person request will fail', () => {
-	cy.intercept('GET', '/api/people/*', {
+	cy.intercept('GET', '/api/people/*/', {
 		statusCode: 500,
 	}).as('person_failure')
 })
 
 Given('homeworld request will succeed', () => {
-	cy.intercept('GET', '/api/planets/*', {
+	cy.intercept('GET', '/api/planets/*/', {
 		statusCode: 200,
 		fixture: 'planet.get.json',
 	}).as('planet_success')
 })
 
 Given('homeworld request will fail', () => {
-	cy.intercept('GET', '/api/planets/*', {
+	cy.intercept('GET', '/api/planets/*/', {
 		statusCode: 500,
 	}).as('planet_failure')
 })
 
 Given('film request will succeed', () => {
-	cy.intercept('GET', '/api/films/*', {
+	cy.intercept('GET', '/api/films/*/', {
 		statusCode: 200,
 		fixture: 'film.get.json',
 	}).as('film_success')
 })
 
 Given('film request will fail', () => {
-	cy.intercept('GET', '/api/films/*', {
+	cy.intercept('GET', '/api/films/*/', {
 		statusCode: 500,
 	}).as('film_fail')
+})
+
+Given('people search request will succeed', () => {
+	cy.intercept('GET', '/api/people/?search=*', {
+		statusCode: 200,
+		fixture: 'people.get.json',
+	}).as('people_search_success')
+})
+
+Given('people search request will succeed without result', () => {
+	cy.intercept('GET', '/api/people/?search=*', {
+		statusCode: 200,
+		fixture: 'people.empty.get.json',
+	}).as('people_search_success_no_results')
+})
+
+Given('people search request will fail', () => {
+	cy.intercept('GET', '/api/people/?search=*', {
+		statusCode: 500,
+	}).as('people_search_fail')
 })
 
 When('I visit {word}', (path: string) => {
@@ -65,6 +85,19 @@ When('I toggle random switch', () => {
 	cy.getBySel('random-slider').click()
 })
 
+When('I search for people', () => {
+	cy.getBySel('search-input').type('Test')
+	cy.getBySel('search-button').click()
+})
+
+When('I empty search field', () => {
+	cy.getBySel('search-input').clear().type('{enter}')
+})
+
+When('I type into search field', () => {
+	cy.getBySel('search-input').type('Test')
+})
+
 Then('the path is {word}', (path: string) => {
 	cy.url().should('eq', `${Cypress.config().baseUrl}${path}`)
 })
@@ -77,15 +110,20 @@ Then('the headline is visible', () => {
 	cy.getBySel('app-headline').contains('Star Wars people')
 })
 
-Then('3 people are visible', () => {
+Then('{int} people are visible', (count: number) => {
 	cy.getBySelLike('person-card').should((elem: any) => {
-		expect(elem).to.have.length(3)
+		expect(elem).to.have.length(count)
 		expect(elem.first()).to.contain('Birth year')
 		expect(elem.first()).to.contain('Gender')
 		expect(elem.first()).to.contain('Height')
 		expect(elem.first()).to.contain('Details')
 	})
 	cy.getBySel('person-details').should('not.exist')
+})
+
+Then('empty message is visible', () => {
+	cy.getBySel('person-details').should('not.exist')
+	cy.getBySel('empty-results-info').should('be.visible')
 })
 
 Then('the details for a person are visible', () => {
@@ -128,4 +166,8 @@ Then('no person details are visible', () => {
 
 Then('an error is shown with message {string}', (message: string) => {
 	cy.contains(message).should('be.visible')
+})
+
+When('search field is empty', () => {
+	cy.getBySel('search-input').should('be.empty')
 })

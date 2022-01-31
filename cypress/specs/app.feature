@@ -61,7 +61,40 @@ Feature: App Page
     When I visit /
     And I click on first person details
     Then the first card is highlighted
-    When I toggle random switch
+    When I type into search field
+    And I toggle random switch
     Then no person details are visible
     And no card is highlighted
+    And search field is empty
 
+  Scenario: Search people
+    Given people request will succeed
+    And people search request will succeed
+    And person request will succeed
+    When I visit /
+    Then 3 people are visible
+    When I click on first person details
+    And I search for people
+    Then 5 people are visible
+    And no person details are visible
+    And no card is highlighted
+    When I empty search field
+    Then 3 people are visible
+
+  Scenario: Search people without results
+    Given people request will succeed
+    Given people search request will succeed without result
+    When I visit /
+    Then 3 people are visible
+    When I search for people
+    Then no people are visible
+    And empty message is visible
+
+  Scenario: Search people request fails
+    Given people request will succeed
+    Given people search request will fail
+    When I visit /
+    Then 3 people are visible
+    When I search for people
+    Then no people are visible
+    And an error is shown with message 'Error while searching people. Please try again.'
