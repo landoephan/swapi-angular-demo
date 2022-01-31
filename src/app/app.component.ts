@@ -14,6 +14,9 @@ import { SwapiService } from './services/swapi.service'
 	styleUrls: ['./app.component.sass'],
 })
 export class AppComponent implements OnInit {
+	private static MAX_PAGE_SIZE = 8
+	private static PEOPLE_COUNT = 3
+
 	people$: Observable<Array<Person>> | undefined
 	person$: Observable<Person | null> | undefined
 	homeworld$: Observable<Planet | null> | undefined
@@ -25,17 +28,21 @@ export class AppComponent implements OnInit {
 
 	constructor(private swapiService: SwapiService, private snackBar: MatSnackBar) {}
 
-	private static getRandomSlice(arr: any[], n: number): any[] {
-		let result = new Array(n),
+	private static getRandomPeople(arr: any[], peopleCount: number): any[] {
+		let result = new Array(peopleCount),
 			len = arr.length,
 			taken = new Array(len)
-		if (n > len) throw new RangeError('more elements taken than available')
-		while (n--) {
+		if (peopleCount > len) throw new RangeError('more people taken than available')
+		while (peopleCount--) {
 			let x = Math.floor(Math.random() * len)
-			result[n] = arr[x in taken ? taken[x] : x]
+			result[peopleCount] = arr[x in taken ? taken[x] : x]
 			taken[x] = --len in taken ? taken[len] : len
 		}
 		return result
+	}
+
+	private static getRandomPageNumber() {
+		return Math.floor(Math.random() * this.MAX_PAGE_SIZE) + 1
 	}
 
 	async ngOnInit() {
@@ -45,7 +52,8 @@ export class AppComponent implements OnInit {
 	loadPersonDetails(url: string, index: number): void {
 		this.activeCard = index
 		this.showPersonLoader = true
-		// we could show details for a person without loading a person - since it was asked for in the task we will do it with extra loading
+		// we could show details for a person without loading a person - since it was asked for in the task we will do it
+		// with extra loading
 		this.person$ = this.swapiService.getPerson(url).pipe(
 			tap((response) => {
 				this.loadHomeworld(response.homeworld)
@@ -53,7 +61,7 @@ export class AppComponent implements OnInit {
 			}),
 			catchError(async (error: any) => {
 				console.log(error)
-				this.openSnackBar('Error while loading person details. Please try again.')
+				this.showError('Error while loading person details. Please try again.')
 				return null
 			}),
 			finalize(() => (this.showPersonLoader = false))
@@ -70,31 +78,33 @@ export class AppComponent implements OnInit {
 
 	changeRandom(): void {
 		this.search = ''
+		this.resetPersonState()
 		this.loadPeople()
 	}
 
 	handleSearchInput(): void {
-		this.activeCard = -1
-		this.person$ = undefined
+		this.resetPersonState()
 		// load initial set of people when search field is empty
 		this.search ? this.searchPeople() : this.loadPeople()
 	}
 
-	private loadPeople(): void {
-		// TODO stop skipping the last page (there are only two people)
+	private resetPersonState() {
 		this.activeCard = -1
 		this.person$ = undefined
-		const pageNumber = this.random ? Math.floor(Math.random() * 8) + 1 : 1
-		const peopleCount = 3
+	}
+
+	private loadPeople(): void {
+		// TODO stop skipping the last page (there are only two people)
+		const pageNumber = this.random ? AppComponent.getRandomPageNumber() : 1
 		this.people$ = this.swapiService.getPeople(pageNumber).pipe(
 			map((result: SwapiListResponse) => {
 				return this.random
-					? AppComponent.getRandomSlice(result.results, peopleCount)
-					: result.results.slice(0, peopleCount)
+					? AppComponent.getRandomPeople(result.results, AppComponent.PEOPLE_COUNT)
+					: result.results.slice(0, AppComponent.PEOPLE_COUNT)
 			}),
 			catchError((error: any) => {
 				console.log(error)
-				this.openSnackBar('Error while loading the people. Please try again.')
+				this.showError('Error while loading the people. Please try again.')
 				return EMPTY
 			})
 		)
@@ -108,7 +118,7 @@ export class AppComponent implements OnInit {
 			}),
 			catchError((error: any) => {
 				console.log(error)
-				this.openSnackBar('Error while searching people. Please try again.')
+				this.showError('Error while searching people. Please try again.')
 				return EMPTY
 			})
 		)
@@ -118,7 +128,7 @@ export class AppComponent implements OnInit {
 		this.homeworld$ = this.swapiService.getHomeworld(url).pipe(
 			catchError((error: any) => {
 				console.log(error)
-				this.openSnackBar('Error while loading the homeworld.')
+				this.showError('Error while loading the homeworld.')
 				return EMPTY
 			})
 		)
@@ -130,7 +140,7 @@ export class AppComponent implements OnInit {
 			this.swapiService.getFilm(url).pipe(
 				catchError((error: any) => {
 					console.log(error)
-					this.openSnackBar('Error while loading films.')
+					this.showError('Error while loading films.')
 					return EMPTY
 				})
 			)
@@ -138,7 +148,7 @@ export class AppComponent implements OnInit {
 		this.films$ = forkJoin(films$)
 	}
 
-	private openSnackBar(message: string, action: string = 'Ok') {
+	private showError(message: string, action: string = 'Ok') {
 		this.snackBar.open(message, action, {
 			duration: 8000,
 			panelClass: ['mat-toolbar', 'mat-warn'],
