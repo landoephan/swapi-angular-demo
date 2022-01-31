@@ -7,6 +7,16 @@ You can also search for a person's name via the input field. Then you can get mo
 
 At the bottom of every person you can click on button 'Details' to see more information regarding that person.
 
+## Prerequisites for the development
+
+Installation of Node.js on the local system.
+
+Recommended version: v16.x.x
+
+## Installation of node modules
+
+Run `npm install`
+
 ## Development server
 
 Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
