@@ -1,27 +1,25 @@
-# SwapiTest
+# SwapiCodingChallenge
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.0.\
+The app shows Star Wars people using the [Star Wars API](https://swapi.dev/). \
+When entered, the page shows the first three people retrieved from the API. Toggle the 'Randomize people'-switch to reload people and get three random ones. \
+You can also search for a person's name via the input field. Then you can get more than three results.
+
+At the bottom of every person you can click on button 'Details' to see more information regarding that person.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Run `npm run cypress:run` to execute headless end-to-end tests via cypress. To use this command, the development server needs to be running.\
+Run `npm run cypress:open` to run cypress tests in a browser.
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Show code coverage
+Run `npm run cypress:coverage` to get a summary on the code coverage. The code coverage computes the source code lines that were executed during the last test run.\
+Run `npm run coverage:open` to open a more detailed report inside the browser.
